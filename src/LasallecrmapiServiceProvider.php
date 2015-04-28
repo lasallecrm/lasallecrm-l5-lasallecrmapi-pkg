@@ -59,16 +59,12 @@ class LasallecrmapiServiceProvider extends ServiceProvider {
     {
         //$this->setupConfiguration();
 
-        $this->setupRoutes($this->app->router);
+        //$this->setupRoutes($this->app->router);
 
         //$this->setupTranslations();
 
-        $this->setupViews();
-
-        //$this->setupAssets();
-
-        //$this->setupMigrations();
-        //$this->setupSeeds();
+        $this->setupMigrations();
+        $this->setupSeeds();
     }
 
 
@@ -127,7 +123,7 @@ class LasallecrmapiServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->registerLasallecrmapit();
+        $this->registerLasallecrmapi();
     }
 
 
@@ -156,21 +152,6 @@ class LasallecrmapiServiceProvider extends ServiceProvider {
         {
             require __DIR__.'/Http/routes.php';
         });
-
-    }
-
-    /**
-     * Define the views for the application.
-     *
-     * @return void
-     */
-    public function setupViews()
-    {
-        $this->loadViewsFrom(__DIR__.'/../views', 'todo');
-
-        $this->publishes([
-            __DIR__.'/../views' => base_path('resources/views/vendor/lasallecrmapi'),
-        ]);
 
     }
 
