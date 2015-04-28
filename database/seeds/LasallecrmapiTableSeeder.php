@@ -265,18 +265,8 @@ class LasallecrmapiTableSeeder extends Seeder
         ]);
 
         Lookup_telephone_type::create([
-            'title'       => 'Billing',
-            'description' => 'Billing',
-            'enabled'     => 1,
-            'created_at' => new DateTime,
-            'created_by' => 1,
-            'updated_at' => new DateTime,
-            'updated_by' => 1,
-        ]);
-
-        Lookup_telephone_type::create([
-            'title'       => 'Shipping',
-            'description' => 'Shipping',
+            'title'       => 'Cell',
+            'description' => 'Cell',
             'enabled'     => 1,
             'created_at' => new DateTime,
             'created_by' => 1,
