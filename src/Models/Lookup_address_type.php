@@ -1,4 +1,5 @@
-<?php namespace Lasallecrm\Lasallecrmapi\Models;
+<?php
+namespace Lasallecrm\Lasallecrmapi\Models;
 
 /**
  *
@@ -31,9 +32,21 @@
  *
  */
 
-use Lasallecrm\Lasallecrmapi\Models\BaseModel;
+/*
+ * LOOKUP_ADDRESS_TYPES IS A LOOKUP TABLE!
+ */
 
-class Lookup_address_type extends BaseModel {
+// LaSalle Software
+use Lasallecms\Lasallecmsapi\Models\BaseModel;
+
+// Laravel facades
+use Illuminate\Support\Facades\DB;
+
+class Lookup_address_type extends BaseModel
+{
+    ///////////////////////////////////////////////////////////////////
+    //////////////          PROPERTIES              ///////////////////
+    ///////////////////////////////////////////////////////////////////
 
     /**
      * The database table used by the model.
@@ -41,7 +54,6 @@ class Lookup_address_type extends BaseModel {
      * @var string
      */
     public $table = 'lookup_address_types';
-
 
     /**
      * Which fields may be mass assigned
@@ -51,14 +63,68 @@ class Lookup_address_type extends BaseModel {
         'title', 'description', 'enabled'
     ];
 
+    /*
+     * User groups that are allowed to execute each controller action
+     */
+    protected $allowed_user_groups = [
+        ['index'   => ['Super Administrator']],
+        ['create'  => ['Super Administrator']],
+        ['store'   => ['Super Administrator']],
+        ['edit'    => ['Super Administrator']],
+        ['update'  => ['Super Administrator']],
+        ['destroy' => ['Super Administrator']],
+    ];
+
+
+
+    ///////////////////////////////////////////////////////////////////
+    //////////////        RELATIONSHIPS             ///////////////////
+    ///////////////////////////////////////////////////////////////////
 
     /*
      * One to one relationship with address table
+     *
+     * Method name must be the model name, *not* the table name
      *
      * @return Eloquent
      */
     public function address()
     {
         return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Address');
+    }
+
+
+
+    ///////////////////////////////////////////////////////////////////
+    ////////////        FOREIGN KEY CONSTRAINTS       /////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /*
+     * Return an array of all the tables using a specified lookup table id.
+     * The array is in the form ['table related to the lookup table' => 'count']
+     *
+     * @param   int   $id   Table ID
+     * @return  array
+     */
+    public function foreignKeyCheck($id)
+    {
+        // 'related_table' is the table name
+        return  [
+            [ 'related_table' => 'addresses', 'count' => $this->addressesCount($id) ],
+        ];
+    }
+
+    /*
+     * Count of related table using lookup table.
+     *
+     * Method name is the table name (no techie reason, just a convention to adopt)
+     *
+     * @return int
+     */
+    public function addressesCount($id)
+    {
+        // I know eloquent does this, but having trouble so hand crafting using DB
+        $record =  DB::table('addresses')->where('address_type_id', '=', $id)->get();
+        return count($record);
     }
 }

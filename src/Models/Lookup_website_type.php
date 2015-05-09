@@ -1,4 +1,5 @@
-<?php namespace Lasallecrm\Lasallecrmapi\Models;
+<?php
+namespace Lasallecrm\Lasallecrmapi\Models;
 
 /**
  *
@@ -31,9 +32,22 @@
  *
  */
 
-use Lasallecrm\Lasallecrmapi\Models\BaseModel;
+/*
+ * LOOKUP_WEBSITE_TYPES IS A LOOKUP TABLE!
+ */
 
-class Lookup_website_type extends BaseModel {
+// LaSalle Software
+use Lasallecms\Lasallecmsapi\Models\BaseModel;
+
+// Laravel facades
+use Illuminate\Support\Facades\DB;
+
+
+class Lookup_website_type extends BaseModel
+{
+    ///////////////////////////////////////////////////////////////////
+    //////////////          PROPERTIES              ///////////////////
+    ///////////////////////////////////////////////////////////////////
 
     /**
      * The database table used by the model.
@@ -53,54 +67,23 @@ class Lookup_website_type extends BaseModel {
         'title', 'description', 'enabled'
     ];
 
-
-    /**
-     * Sanitation rules for Create (INSERT)
-     *
-     * @var array
+    /*
+     * User groups that are allowed to execute each controller action
      */
-    public $sanitationRulesForCreate = [
-        'title'            => 'trim|strip_tags',
-        'description'      => 'trim',
-    ];
-
-    /**
-     * Sanitation rules for UPDATE
-     *
-     * @var array
-     */
-    public $sanitationRulesForUpdate = [
-        'title'            => 'trim|strip_tags',
-        'description'      => 'trim',
+    protected $allowed_user_groups = [
+        ['index'   => ['Super Administrator']],
+        ['create'  => ['Super Administrator']],
+        ['store'   => ['Super Administrator']],
+        ['edit'    => ['Super Administrator']],
+        ['update'  => ['Super Administrator']],
+        ['destroy' => ['Super Administrator']],
     ];
 
 
-    /**
-     * Validation rules for  Create (INSERT)
-     *
-     * NOTE: content field has 7 chars when blank!
-     *
-     * @var array
-     */
-    public $validationRulesForCreate = [
-        'title'            => 'required|min:4|unique:lookup_website_types',
-        'description'      => 'min:11',
-        'enabled'          => 'boolean',
-    ];
 
-    /**
-     * Validation rules for UPDATE
-     *
-     * NOTE: content field has 7 chars when blank!
-     *
-     * @var array
-     */
-    public $validationRulesForUpdate = [
-        'title'            => 'required|min:4',
-        'description'      => 'min:11',
-        'enabled'          => 'boolean',
-    ];
-
+    ///////////////////////////////////////////////////////////////////
+    //////////////        RELATIONSHIPS             ///////////////////
+    ///////////////////////////////////////////////////////////////////
 
     /*
      * One to one relationship with website table
@@ -114,4 +97,36 @@ class Lookup_website_type extends BaseModel {
 
 
 
+    ///////////////////////////////////////////////////////////////////
+    ////////////        FOREIGN KEY CONSTRAINTS       /////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /*
+     * Return an array of all the tables using a specified lookup table id.
+     * The array is in the form ['table related to the lookup table' => 'count']
+     *
+     * @param   int   $id   Table ID
+     * @return  array
+     */
+    public function foreignKeyCheck($id)
+    {
+        // 'related_table' is the table name
+        return  [
+            [ 'related_table' => 'websites', 'count' => $this->websitesCount($id) ],
+        ];
+    }
+
+    /*
+     * Count of related table using lookup table.
+     *
+     * Method name is the table name (no techie reason, just a convention to adopt)
+     *
+     * @return int
+     */
+    public function websitesCount($id)
+    {
+        // I know eloquent does this, but having trouble so hand crafting using DB
+        $record =  DB::table('websites')->where('website_type_id', '=', $id)->get();
+        return count($record);
+    }
 }

@@ -1,4 +1,5 @@
-<?php namespace Lasallecrm\Lasallecrmapi\Models;
+<?php
+namespace Lasallecrm\Lasallecrmapi\Models;
 
 /**
  *
@@ -33,9 +34,8 @@
 
 use Lasallecrm\Lasallecrmapi\Models\BaseModel;
 
-class Address extends BaseModel {
-
-
+class Address extends BaseModel
+{
     /**
      * The database table used by the model.
      *
@@ -120,5 +120,23 @@ class Address extends BaseModel {
         return $this->hasOne('Lasallecrm\Lasallecrmapi\Models\Lookup_address_type');
     }
 
+    /*
+     * One to one relationship with people
+     *
+     * @return Eloquent
+     */
+    public function people()
+    {
+        return $this->hasOne('Lasallecrm\Lasallecrmapi\Models\People');
+    }
 
+    /*
+     * One to one relationship with company
+     *
+     * @return Eloquent
+     */
+    public function company()
+    {
+        return $this->hasOne('Lasallecrm\Lasallecrmapi\Models\Company');
+    }
 }

@@ -1,4 +1,5 @@
-<?php namespace Lasallecrm\Lasallecrmapi\Models;
+<?php
+namespace Lasallecrm\Lasallecrmapi\Models;
 
 /**
  *
@@ -33,15 +34,14 @@
 
 use Lasallecrm\Lasallecrmapi\Models\BaseModel;
 
-class Website extends BaseModel {
-
-
+class Website extends BaseModel
+{
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    public $table = 'websitess';
+    public $table = 'websites';
 
 
     /**
@@ -106,6 +106,26 @@ class Website extends BaseModel {
     public function lookup_website_type()
     {
         return $this->hasOne('Lasallecrm\Lasallecrmapi\Models\Lookup_website_type');
+    }
+
+    /*
+     * One to one relationship with people
+     *
+     * @return Eloquent
+     */
+    public function people()
+    {
+        return $this->hasOne('Lasallecrm\Lasallecrmapi\Models\People');
+    }
+
+    /*
+     * One to one relationship with company
+     *
+     * @return Eloquent
+     */
+    public function company()
+    {
+        return $this->hasOne('Lasallecrm\Lasallecrmapi\Models\Company');
     }
 
 

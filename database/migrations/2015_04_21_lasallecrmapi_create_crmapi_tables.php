@@ -243,6 +243,7 @@ class CreateCrmapiTables extends Migration {
             });
         }
 
+
         if (!Schema::hasTable('addresses'))
         {
             Schema::create('addresses', function (Blueprint $table)
@@ -251,8 +252,16 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
+
                 $table->integer('address_type_id')->nullable()->unsigned();
                 $table->foreign('address_type_id')->references('id')->on('lookup_address_types');
+
+                $table->integer('people_id')->nullable()->unsigned();
+                $table->foreign('people_id')->references('id')->on('peoples');
+
+                $table->integer('company_id')->nullable()->unsigned();
+                $table->foreign('company_id')->references('id')->on('companies');
+
 
                 $table->string('street1');
                 $table->string('street2');
@@ -288,8 +297,16 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
+
                 $table->integer('email_type_id')->nullable()->unsigned();
                 $table->foreign('email_type_id')->references('id')->on('lookup_email_types');
+
+                $table->integer('people_id')->nullable()->unsigned();
+                $table->foreign('people_id')->references('id')->on('peoples');
+
+                $table->integer('company_id')->nullable()->unsigned();
+                $table->foreign('company_id')->references('id')->on('companies');
+
 
                 $table->string('email')->unique();
                 $table->string('description');
@@ -317,8 +334,16 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
+
                 $table->integer('social_type_id')->nullable()->unsigned();
                 $table->foreign('social_type_id')->references('id')->on('lookup_social_types');
+
+                $table->integer('people_id')->nullable()->unsigned();
+                $table->foreign('people_id')->references('id')->on('peoples');
+
+                $table->integer('company_id')->nullable()->unsigned();
+                $table->foreign('company_id')->references('id')->on('companies');
+
 
                 $table->string('title')->unique();
                 $table->string('description');
@@ -349,6 +374,14 @@ class CreateCrmapiTables extends Migration {
                 $table->integer('telephone_type_id')->nullable()->unsigned();
                 $table->foreign('telephone_type_id')->references('id')->on('lookup_telephone_types');
 
+
+                $table->integer('people_id')->nullable()->unsigned();
+                $table->foreign('people_id')->references('id')->on('peoples');
+
+                $table->integer('company_id')->nullable()->unsigned();
+                $table->foreign('company_id')->references('id')->on('companies');
+
+
                 $table->string('telephone')->unique();
                 $table->string('description');
                 $table->text('comments');
@@ -377,6 +410,14 @@ class CreateCrmapiTables extends Migration {
 
                 $table->integer('website_type_id')->nullable()->unsigned();
                 $table->foreign('website_type_id')->references('id')->on('lookup_website_types');
+
+
+                $table->integer('people_id')->nullable()->unsigned();
+                $table->foreign('people_id')->references('id')->on('peoples');
+
+                $table->integer('company_id')->nullable()->unsigned();
+                $table->foreign('company_id')->references('id')->on('companies');
+
 
                 $table->string('url')->unique();
                 $table->string('description');
@@ -474,6 +515,8 @@ class CreateCrmapiTables extends Migration {
 
         Schema::table('addresses', function($table){
             $table->dropForeign('addresses_address_type_id_foreign');
+            $table->dropForeign('addresses_people_id_foreign');
+            $table->dropForeign('addresses_company_id_foreign');
             $table->dropForeign('addresses_created_by_foreign');
             $table->dropForeign('addresses_updated_by_foreign');
             $table->dropForeign('addresses_locked_by_foreign');
@@ -483,6 +526,8 @@ class CreateCrmapiTables extends Migration {
         Schema::table('emails', function($table){
             $table->dropIndex('emails_email_unique');
             $table->dropForeign('emails_email_type_id_foreign');
+            $table->dropForeign('emails_people_id_foreign');
+            $table->dropForeign('emails_company_id_foreign');
             $table->dropForeign('emails_created_by_foreign');
             $table->dropForeign('emails_updated_by_foreign');
             $table->dropForeign('emails_locked_by_foreign');
@@ -492,6 +537,8 @@ class CreateCrmapiTables extends Migration {
         Schema::table('socials', function($table){
             $table->dropIndex('socials_social_unique');
             $table->dropForeign('socials_social_type_id_foreign');
+            $table->dropForeign('socials_people_id_foreign');
+            $table->dropForeign('socials_company_id_foreign');
             $table->dropForeign('socials_created_by_foreign');
             $table->dropForeign('socials_updated_by_foreign');
             $table->dropForeign('socials_locked_by_foreign');
@@ -501,6 +548,8 @@ class CreateCrmapiTables extends Migration {
         Schema::table('telephones', function($table){
             $table->dropIndex('telephones_telephone_unique');
             $table->dropForeign('telephones_telephone_type_id_foreign');
+            $table->dropForeign('telephones_people_id_foreign');
+            $table->dropForeign('telephones_company_id_foreign');
             $table->dropForeign('telephones_created_by_foreign');
             $table->dropForeign('telephones_updated_by_foreign');
             $table->dropForeign('telephones_locked_by_foreign');
@@ -510,6 +559,8 @@ class CreateCrmapiTables extends Migration {
         Schema::table('websites', function($table){
             $table->dropIndex('websites_url_unique');
             $table->dropForeign('websites_website_type_id_foreign');
+            $table->dropForeign('websites_people_id_foreign');
+            $table->dropForeign('websites_company_id_foreign');
             $table->dropForeign('websites_created_by_foreign');
             $table->dropForeign('websites_updated_by_foreign');
             $table->dropForeign('websites_locked_by_foreign');

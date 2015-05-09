@@ -1,4 +1,5 @@
-<?php namespace Lasallecrm\Lasallecrmapi\Models;
+<?php
+namespace Lasallecrm\Lasallecrmapi\Models;
 
 /**
  *
@@ -115,5 +116,53 @@ class People extends BaseModel {
         return $this->belongsTo('Lasallecms\Lasallecmsapi\Models\User');
     }
 
+    /*
+    * One to one relationship with address table
+    *
+    * @return Eloquent
+    */
+    public function address()
+    {
+        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Address');
+    }
 
+    /*
+     * One to one relationship with email table
+     *
+     * @return Eloquent
+     */
+    public function email()
+    {
+        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Email');
+    }
+
+    /*
+     * One to one relationship with social table
+     *
+     * @return Eloquent
+     */
+    public function social()
+    {
+        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Social');
+    }
+
+    /*
+     * One to one relationship with telephone table
+     *
+     * @return Eloquent
+     */
+    public function telephone()
+    {
+        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Telephone');
+    }
+
+    /*
+     * One to one relationship with website table
+     *
+     * @return Eloquent
+     */
+    public function website()
+    {
+        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Website');
+    }
 }
