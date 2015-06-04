@@ -67,7 +67,7 @@ class Lookup_email_type extends BaseModel
     /*
      * User groups that are allowed to execute each controller action
      */
-    protected $allowed_user_groups = [
+    public $allowed_user_groups = [
         ['index'   => ['Super Administrator']],
         ['create'  => ['Super Administrator']],
         ['store'   => ['Super Administrator']],

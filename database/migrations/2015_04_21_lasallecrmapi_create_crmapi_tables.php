@@ -43,7 +43,9 @@ class CreateCrmapiTables extends Migration {
 	 */
 	public function up()
     {
-        // START: Lookup tables
+        ///////////////////////////////////////////////////////////////////////
+        ////                    Lookup Tables                              ////
+        ///////////////////////////////////////////////////////////////////////
 
         if (!Schema::hasTable('lookup_address_types'))
         {
@@ -180,8 +182,10 @@ class CreateCrmapiTables extends Migration {
             });
         }
 
-        // END: Lookup tables
 
+        ///////////////////////////////////////////////////////////////////////
+        ////                    Main Tables                                ////
+        ///////////////////////////////////////////////////////////////////////
 
 
         if (!Schema::hasTable('companies'))
@@ -192,7 +196,7 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-                $table->string('title')->unique();
+                $table->string('title');
                 $table->string('description');
                 $table->text('comments');
 
@@ -221,6 +225,10 @@ class CreateCrmapiTables extends Migration {
                 $table->integer('user_id')->nullable()->unsigned();
                 $table->foreign('user_id')->references('id')->on('users');
 
+                // "Composite Title" that is comprised of the "first_name" and "surname"
+                // concatenated automatically during persist operations
+                $table->string('title');
+
                 $table->string('salutation');
                 $table->string('first_name');
                 $table->string('middle_name');
@@ -228,6 +236,9 @@ class CreateCrmapiTables extends Migration {
                 $table->string('position');
                 $table->string('description');
                 $table->text('comments');
+
+                $table->date('birthday')->nullable();
+                $table->date('anniversary')->nullable();
 
                 $table->timestamp('created_at');
                 $table->integer('created_by')->unsigned();
@@ -244,6 +255,10 @@ class CreateCrmapiTables extends Migration {
         }
 
 
+        ///////////////////////////////////////////////////////////////////////
+        ////          Tables Relating to the Main Tables                   ////
+        ///////////////////////////////////////////////////////////////////////
+
         if (!Schema::hasTable('addresses'))
         {
             Schema::create('addresses', function (Blueprint $table)
@@ -252,16 +267,12 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-
-                $table->integer('address_type_id')->nullable()->unsigned();
+                $table->integer('address_type_id')->unsigned();
                 $table->foreign('address_type_id')->references('id')->on('lookup_address_types');
 
-                $table->integer('people_id')->nullable()->unsigned();
-                $table->foreign('people_id')->references('id')->on('peoples');
-
-                $table->integer('company_id')->nullable()->unsigned();
-                $table->foreign('company_id')->references('id')->on('companies');
-
+                // "Composite Title" that is comprised of the "first_name" and "surname"
+                // concatenated automatically during persist operations.
+                $table->string('title');
 
                 $table->string('street1');
                 $table->string('street2');
@@ -297,18 +308,10 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-
-                $table->integer('email_type_id')->nullable()->unsigned();
+                $table->integer('email_type_id')->unsigned();
                 $table->foreign('email_type_id')->references('id')->on('lookup_email_types');
 
-                $table->integer('people_id')->nullable()->unsigned();
-                $table->foreign('people_id')->references('id')->on('peoples');
-
-                $table->integer('company_id')->nullable()->unsigned();
-                $table->foreign('company_id')->references('id')->on('companies');
-
-
-                $table->string('email')->unique();
+                $table->string('title')->unique();
                 $table->string('description');
                 $table->text('comments');
 
@@ -334,18 +337,10 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-
-                $table->integer('social_type_id')->nullable()->unsigned();
+                $table->integer('social_type_id')->unsigned();
                 $table->foreign('social_type_id')->references('id')->on('lookup_social_types');
 
-                $table->integer('people_id')->nullable()->unsigned();
-                $table->foreign('people_id')->references('id')->on('peoples');
-
-                $table->integer('company_id')->nullable()->unsigned();
-                $table->foreign('company_id')->references('id')->on('companies');
-
-
-                $table->string('title')->unique();
+                $table->string('title');
                 $table->string('description');
                 $table->text('comments');
 
@@ -371,18 +366,10 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-                $table->integer('telephone_type_id')->nullable()->unsigned();
+                $table->integer('telephone_type_id')->unsigned();
                 $table->foreign('telephone_type_id')->references('id')->on('lookup_telephone_types');
 
-
-                $table->integer('people_id')->nullable()->unsigned();
-                $table->foreign('people_id')->references('id')->on('peoples');
-
-                $table->integer('company_id')->nullable()->unsigned();
-                $table->foreign('company_id')->references('id')->on('companies');
-
-
-                $table->string('telephone')->unique();
+                $table->string('title');
                 $table->string('description');
                 $table->text('comments');
 
@@ -408,18 +395,10 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-                $table->integer('website_type_id')->nullable()->unsigned();
+                $table->integer('website_type_id')->unsigned();
                 $table->foreign('website_type_id')->references('id')->on('lookup_website_types');
 
-
-                $table->integer('people_id')->nullable()->unsigned();
-                $table->foreign('people_id')->references('id')->on('peoples');
-
-                $table->integer('company_id')->nullable()->unsigned();
-                $table->foreign('company_id')->references('id')->on('companies');
-
-
-                $table->string('url')->unique();
+                $table->string('title');
                 $table->string('description');
                 $table->text('comments');
 
@@ -434,6 +413,181 @@ class CreateCrmapiTables extends Migration {
                 $table->timestamp('locked_at')->nullable();
                 $table->integer('locked_by')->nullable()->unsigned();
                 $table->foreign('locked_by')->references('id')->on('users');
+            });
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////
+        ////               Pivot Tables for COMPANIES                      ////
+        ///////////////////////////////////////////////////////////////////////
+
+        if (!Schema::hasTable('company_people'))
+        {
+            Schema::create('company_people', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('company_id')->unsigned()->index();
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+                $table->integer('people_id')->unsigned()->index();
+                $table->foreign('people_id')->references('id')->on('peoples')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('company_address'))
+        {
+            Schema::create('company_address', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('company_id')->unsigned()->index();
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+                $table->integer('address_id')->unsigned()->index();
+                $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('company_email'))
+        {
+            Schema::create('company_email', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('company_id')->unsigned()->index();
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+                $table->integer('email_id')->unsigned()->index();
+                $table->foreign('email_id')->references('id')->on('emails')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('company_social'))
+        {
+            Schema::create('company_social', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('company_id')->unsigned()->index();
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+                $table->integer('social_id')->unsigned()->index();
+                $table->foreign('social_id')->references('id')->on('socials')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('company_telephone'))
+        {
+            Schema::create('company_telephone', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('company_id')->unsigned()->index();
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+                $table->integer('telephone_id')->unsigned()->index();
+                $table->foreign('telephone_id')->references('id')->on('telephones')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('company_website'))
+        {
+            Schema::create('company_website', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('company_id')->unsigned()->index();
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+                $table->integer('website_id')->unsigned()->index();
+                $table->foreign('website_id')->references('id')->on('websites')->onDelete('cascade');
+            });
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////
+        ////                 Pivot Tables for PEOPLES                      ////
+        ///////////////////////////////////////////////////////////////////////
+
+        if (!Schema::hasTable('people_address'))
+        {
+            Schema::create('people_address', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('people_id')->unsigned()->index();
+                $table->foreign('people_id')->references('id')->on('peoples')->onDelete('cascade');
+                $table->integer('address_id')->unsigned()->index();
+                $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('people_email'))
+        {
+            Schema::create('people_email', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('people_id')->unsigned()->index();
+                $table->foreign('people_id')->references('id')->on('peoples')->onDelete('cascade');
+                $table->integer('email_id')->unsigned()->index();
+                $table->foreign('email_id')->references('id')->on('emails')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('people_social'))
+        {
+            Schema::create('people_social', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('people_id')->unsigned()->index();
+                $table->foreign('people_id')->references('id')->on('peoples')->onDelete('cascade');
+                $table->integer('social_id')->unsigned()->index();
+                $table->foreign('social_id')->references('id')->on('socials')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('people_telephone'))
+        {
+            Schema::create('people_telephone', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('people_id')->unsigned()->index();
+                $table->foreign('people_id')->references('id')->on('peoples')->onDelete('cascade');
+                $table->integer('telephone_id')->unsigned()->index();
+                $table->foreign('telephone_id')->references('id')->on('telephones')->onDelete('cascade');
+            });
+        }
+
+        if (!Schema::hasTable('people_website'))
+        {
+            Schema::create('people_website', function (Blueprint $table)
+            {
+                $table->engine = 'InnoDB';
+
+                $table->increments('id')->unsigned();
+
+                $table->integer('people_id')->unsigned()->index();
+                $table->foreign('people_id')->references('id')->on('peoples')->onDelete('cascade');
+                $table->integer('website_id')->unsigned()->index();
+                $table->foreign('website_id')->references('id')->on('websites')->onDelete('cascade');
             });
         }
     }
@@ -451,7 +605,9 @@ class CreateCrmapiTables extends Migration {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 
 
-        // START: Lookup tables
+        ///////////////////////////////////////////////////////////////////////
+        ////                       Lookup Tables                           ////
+        ///////////////////////////////////////////////////////////////////////
 
         Schema::table('lookup_address_types', function($table){
             $table->dropIndex('lookup_address_types_title_unique');
@@ -493,8 +649,10 @@ class CreateCrmapiTables extends Migration {
         });
         Schema::dropIfExists('lookup_website_types');
 
-        // END: Lookup tables
 
+        ///////////////////////////////////////////////////////////////////////
+        ////                    Main Tables                                ////
+        ///////////////////////////////////////////////////////////////////////
 
         Schema::table('companies', function($table){
             $table->dropIndex('companies_title_unique');
@@ -502,10 +660,9 @@ class CreateCrmapiTables extends Migration {
             $table->dropForeign('companies_updated_by_foreign');
             $table->dropForeign('companies_locked_by_foreign');
         });
-        Schema::dropIfExists('companiess');
+        Schema::dropIfExists('companies');
 
         Schema::table('peoples', function($table){
-            $table->dropIndex('peoples_title_unique');
             $table->dropForeign('peoples_user_id_foreign');
             $table->dropForeign('peoples_created_by_foreign');
             $table->dropForeign('peoples_updated_by_foreign');
@@ -513,10 +670,13 @@ class CreateCrmapiTables extends Migration {
         });
         Schema::dropIfExists('peoples');
 
+
+        ///////////////////////////////////////////////////////////////////////
+        ////          Tables Relating to the Main Tables                   ////
+        ///////////////////////////////////////////////////////////////////////
+
         Schema::table('addresses', function($table){
             $table->dropForeign('addresses_address_type_id_foreign');
-            $table->dropForeign('addresses_people_id_foreign');
-            $table->dropForeign('addresses_company_id_foreign');
             $table->dropForeign('addresses_created_by_foreign');
             $table->dropForeign('addresses_updated_by_foreign');
             $table->dropForeign('addresses_locked_by_foreign');
@@ -526,8 +686,6 @@ class CreateCrmapiTables extends Migration {
         Schema::table('emails', function($table){
             $table->dropIndex('emails_email_unique');
             $table->dropForeign('emails_email_type_id_foreign');
-            $table->dropForeign('emails_people_id_foreign');
-            $table->dropForeign('emails_company_id_foreign');
             $table->dropForeign('emails_created_by_foreign');
             $table->dropForeign('emails_updated_by_foreign');
             $table->dropForeign('emails_locked_by_foreign');
@@ -535,21 +693,16 @@ class CreateCrmapiTables extends Migration {
         Schema::dropIfExists('emails');
 
         Schema::table('socials', function($table){
-            $table->dropIndex('socials_social_unique');
+            $table->dropIndex('socials_title_unique');
             $table->dropForeign('socials_social_type_id_foreign');
-            $table->dropForeign('socials_people_id_foreign');
-            $table->dropForeign('socials_company_id_foreign');
             $table->dropForeign('socials_created_by_foreign');
             $table->dropForeign('socials_updated_by_foreign');
             $table->dropForeign('socials_locked_by_foreign');
         });
-        Schema::dropIfExists('telephones');
+        Schema::dropIfExists('socials');
 
         Schema::table('telephones', function($table){
-            $table->dropIndex('telephones_telephone_unique');
             $table->dropForeign('telephones_telephone_type_id_foreign');
-            $table->dropForeign('telephones_people_id_foreign');
-            $table->dropForeign('telephones_company_id_foreign');
             $table->dropForeign('telephones_created_by_foreign');
             $table->dropForeign('telephones_updated_by_foreign');
             $table->dropForeign('telephones_locked_by_foreign');
@@ -557,15 +710,110 @@ class CreateCrmapiTables extends Migration {
         Schema::dropIfExists('telephones');
 
         Schema::table('websites', function($table){
-            $table->dropIndex('websites_url_unique');
             $table->dropForeign('websites_website_type_id_foreign');
-            $table->dropForeign('websites_people_id_foreign');
-            $table->dropForeign('websites_company_id_foreign');
             $table->dropForeign('websites_created_by_foreign');
             $table->dropForeign('websites_updated_by_foreign');
             $table->dropForeign('websites_locked_by_foreign');
         });
         Schema::dropIfExists('websites');
+
+
+        ///////////////////////////////////////////////////////////////////////
+        ////               Pivot Tables for COMPANIES                      ////
+        ///////////////////////////////////////////////////////////////////////
+
+        Schema::table('company_people', function($table){
+            $table->dropIndex('company_people_company_id_index');
+            $table->dropForeign('company_people_company_id_foreign');
+            $table->dropIndex('company_people_people_id_index');
+            $table->dropForeign('company_people_people_id_foreign');
+        });
+        Schema::dropIfExists('company_people');
+
+        Schema::table('company_address', function($table){
+            $table->dropIndex('company_address_company_id_index');
+            $table->dropForeign('company_address_company_id_foreign');
+            $table->dropIndex('company_address_address_id_index');
+            $table->dropForeign('company_address_address_id_foreign');
+        });
+        Schema::dropIfExists('company_people');
+
+        Schema::table('company_email', function($table){
+            $table->dropIndex('company_email_company_id_index');
+            $table->dropForeign('company_email_company_id_foreign');
+            $table->dropIndex('company_email_email_id_index');
+            $table->dropForeign('company_email_email_id_foreign');
+        });
+        Schema::dropIfExists('company_email');
+
+        Schema::table('company_social', function($table){
+            $table->dropIndex('company_social_company_id_index');
+            $table->dropForeign('company_social_company_id_foreign');
+            $table->dropIndex('company_social_social_id_index');
+            $table->dropForeign('company_social_social_id_foreign');
+        });
+        Schema::dropIfExists('company_social');
+
+        Schema::table('company_telephone', function($table){
+            $table->dropIndex('company_telephone_company_id_index');
+            $table->dropForeign('company_telephone_company_id_foreign');
+            $table->dropIndex('company_telephone_telephone_id_index');
+            $table->dropForeign('company_telephone_telephone_id_foreign');
+        });
+        Schema::dropIfExists('company_telephone');
+
+        Schema::table('company_website', function($table){
+            $table->dropIndex('company_website_company_id_index');
+            $table->dropForeign('company_website_company_id_foreign');
+            $table->dropIndex('company_website_website_id_index');
+            $table->dropForeign('company_website_website_id_foreign');
+        });
+        Schema::dropIfExists('company_website');
+
+
+        ///////////////////////////////////////////////////////////////////////
+        ////                 Pivot Tables for PEOPLES                      ////
+        ///////////////////////////////////////////////////////////////////////
+
+        Schema::table('people_address', function($table){
+            $table->dropIndex('people_address_people_id_index');
+            $table->dropForeign('people_address_people_id_foreign');
+            $table->dropIndex('people_address_address_id_index');
+            $table->dropForeign('people_address_address_id_foreign');
+        });
+        Schema::dropIfExists('people_address');
+
+        Schema::table('people_email', function($table){
+            $table->dropIndex('people_email_people_id_index');
+            $table->dropForeign('people_email_people_id_foreign');
+            $table->dropIndex('people_email_email_id_index');
+            $table->dropForeign('people_email_email_id_foreign');
+        });
+        Schema::dropIfExists('people_email');
+
+        Schema::table('people_social', function($table){
+            $table->dropIndex('people_social_people_id_index');
+            $table->dropForeign('people_social_people_id_foreign');
+            $table->dropIndex('people_social_social_id_index');
+            $table->dropForeign('people_social_social_id_foreign');
+        });
+        Schema::dropIfExists('people_social');
+
+        Schema::table('people_telephone', function($table){
+            $table->dropIndex('people_telephone_people_id_index');
+            $table->dropForeign('people_telephone_people_id_foreign');
+            $table->dropIndex('people_telephone_telephone_id_index');
+            $table->dropForeign('people_telephone_telephone_id_foreign');
+        });
+        Schema::dropIfExists('people_telephone');
+
+        Schema::table('people_website', function($table){
+            $table->dropIndex('people_website_people_id_index');
+            $table->dropForeign('people_website_people_id_foreign');
+            $table->dropIndex('people_website_website_id_index');
+            $table->dropForeign('people_website_website_id_foreign');
+        });
+        Schema::dropIfExists('people_website');
 
 
         // Enable foreign key constraints

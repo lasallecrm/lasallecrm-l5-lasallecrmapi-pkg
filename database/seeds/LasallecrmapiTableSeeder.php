@@ -308,9 +308,24 @@ class LasallecrmapiTableSeeder extends Seeder
             'updated_by' => 1,
         ]);
 
+        Lookup_website_type::create([
+            'title'       => 'Business',
+            'description' => 'The main site for the business.',
+            'enabled'     => 1,
+            'created_at' => new DateTime,
+            'created_by' => 1,
+            'updated_at' => new DateTime,
+            'updated_by' => 1,
+        ]);
 
+        Lookup_website_type::create([
+            'title'       => 'Client',
+            'description' => 'This site is a client of someone!',
+            'enabled'     => 1,
+            'created_at' => new DateTime,
+            'created_by' => 1,
+            'updated_at' => new DateTime,
+            'updated_by' => 1,
+        ]);
     }
-
-
-
 }

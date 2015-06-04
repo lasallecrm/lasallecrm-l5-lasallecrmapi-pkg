@@ -32,18 +32,30 @@ namespace Lasallecrm\Lasallecrmapi\Models;
  *
  */
 
-use Lasallecrm\Lasallecrmapi\Models\BaseModel;
+// LaSalle Software
+use Lasallecms\Lasallecmsapi\Models\BaseModel;
 
-class People extends BaseModel {
 
+class People extends BaseModel
+{
+    ///////////////////////////////////////////////////////////////////
+    ///////////     MANDATORY USER DEFINED PROPERTIES      ////////////
+    ///////////              MODIFY THESE!                /////////////
+    ///////////////////////////////////////////////////////////////////
+
+
+    // LARAVEL MODEL CLASS PROPERTIES
 
     /**
      * The database table used by the model.
      *
+     * The convention is plural -- and plural is assumed.
+     *
+     * Lowercase.
+     *
      * @var string
      */
     public $table = 'peoples';
-
 
     /**
      * Which fields may be mass assigned
@@ -53,6 +65,91 @@ class People extends BaseModel {
         'user_id', 'salutation', 'first_name', 'middle_name', 'surname', 'position', 'description', 'comments',
     ];
 
+
+    // PACKAGE PROPERTIES
+
+    /*
+     * Name of this package
+     *
+     * @var string
+     */
+    public $package_title = "LaSalleCRM";
+
+
+    // MODEL PROPERTIES
+
+    /*
+     * Model class namespace.
+     *
+     * Do *NOT* specify the model's class.
+     *
+     * @var string
+     */
+    public $model_namespace = "Lasallecrm\Lasallecrmapi\Models";
+
+    /*
+     * Model's class.
+     *
+     * Convention is capitalized and singular -- which is assumed.
+     *
+     * @var string
+     */
+    public $model_class = "People";
+
+
+    // RESOURCE ROUTE PROPERTIES
+
+    /*
+     * The base URL of the resource routes.
+     *
+     * Frequently is the same as the table name.
+     *
+     * By convention, plural.
+     *
+     * Lowercase.
+     *
+     * @var string
+     */
+    public $resource_route_name   = "crmpeoples";
+
+
+    // FORM PROCESSORS PROPERTIES.
+    // THESE ARE THE ADMIN CRUD COMMAND HANDLERS.
+    // THE ONLY REASON YOU HAVE TO CREATE THESE COMMAND HANDLERS AT ALL IS THAT
+    // THE EVENTS DIFFER. EVERYTHING THAT HAPPENS UP TO THE "PERSIST" IS PRETTY STANDARD.
+
+    /*
+     * Namespace of the Form Processors
+     *
+     * MUST *NOT* have a slash at the end of the string
+     *
+     * @var string
+     */
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Peoples';
+
+    /*
+     * Class name of the CREATE Form Processor command
+     *
+     * @var string
+     */
+    public $classname_formprocessor_create = 'CreatePeopleFormProcessing';
+
+    /*
+     * Namespace and class name of the UPDATE Form Processor command
+     *
+     * @var string
+     */
+    public $classname_formprocessor_update = 'UpdatePeopleFormProcessing';
+
+    /*
+     * Namespace and class name of the DELETE (DESTROY) Form Processor command
+     *
+     * @var string
+     */
+    public $classname_formprocessor_delete = 'DeletePeopleFormProcessing';
+
+
+    // SANITATION RULES PROPERTIES
 
     /**
      * Sanitation rules for Create (INSERT)
@@ -83,6 +180,8 @@ class People extends BaseModel {
     ];
 
 
+    // VALIDATION RULES PROPERTIES
+
     /**
      * Validation rules for  Create (INSERT)
      *
@@ -105,9 +204,174 @@ class People extends BaseModel {
     ];
 
 
+    // USER GROUPS & ROLES PROPERTIES
 
     /*
-     * One to one relationship with lookup_address_type
+     * User groups that are allowed to execute each controller action
+     *
+     * @var array
+     */
+    public $allowed_user_groups = [
+        ['index'   => ['Super Administrator']],
+        ['create'  => ['Super Administrator']],
+        ['store'   => ['Super Administrator']],
+        ['edit'    => ['Super Administrator']],
+        ['update'  => ['Super Administrator']],
+        ['destroy' => ['Super Administrator']],
+    ];
+
+
+    // FIELD LIST PROPERTIES
+
+    /*
+     * Field list
+     *
+     * ID and TITLE must go first.
+     *
+     * Forms will list fields in the order fields are listed in this array.
+     *
+     * @var array
+     */
+    public $field_list = [
+        [
+            /*  "Composite Title" field. Database tables that are related to each other need a "Title" field.
+                 There is no natural field that can serve as the "Title" field. The "Composite Title" field
+                 concatenates other fields during create and updates automatically.
+
+                 * not for lookup tables
+                 * include  'index_skip' => true,  so existing code will exclude from index listing
+                 * MySQL field type "text" so not run out of space concatenating multiple varchar(255) fields
+             */
+            'name'                  => 'composite_title',
+            'type'                  => 'composite_title',
+            'fields_to_concatenate' => ['first_name', 'surname'],
+            'index_skip'            => true,
+        ],
+        [
+            'name'                  => 'id',
+            'type'                  => 'int',
+            'info'                  => false,
+            'index_skip'            => false,
+            'index_align'           => 'center',
+        ],
+        [
+            'name'                   => 'salutation',
+            'type'                   => 'varchar',
+            'info'                   => 'Mr., Mrs., Dr., etc',
+            'index_skip'             => false,
+            'index_align'            => 'center',
+            'persist_wash'           => 'description',
+        ],
+        [
+            'name'                   => 'first_name',
+            'type'                   => 'varchar',
+            'info'                   => false,
+            'index_skip'             => false,
+            'persist_wash'           => 'description',
+        ],
+        [
+            'name'                   => 'middle_name',
+            'type'                   => 'varchar',
+            'info'                   => false,
+            'index_skip'             => false,
+            'persist_wash'           => 'description',
+        ],
+        [
+            'name'                   => 'surname',
+            'type'                   => 'varchar',
+            'info'                   => false,
+            'index_skip'             => false,
+            'persist_wash'           => 'description',
+        ],
+        [
+            'name'                   => 'position',
+            'type'                   => 'varchar',
+            'info'                   => false,
+            'index_skip'             => false,
+            'persist_wash'           => 'description',
+        ],
+        [
+            'name'                   => 'description',
+            'type'                   => 'text-no-editor',
+            'info'                   => 'Description is optional. 255 character maximum.',
+            'index_skip'             => false,
+        ],
+        [
+            'name'                   => 'comments',
+            'type'                   => 'text-with-editor',
+            'info'                   => 'Optional.',
+            'index_skip'             => true,
+            'persist_wash'           => 'content',
+        ],
+        [
+            'name'                  => 'birthday',
+            'type'                  => 'date',
+            'info'                  => 'Optional. Just click the x to clear.',
+            'index_skip'            => true,
+            'index_align'           => 'center',
+            'persist_wash'          => 'birthday',
+        ],
+        [
+            'name'                  => 'anniversary',
+            'type'                  => 'date',
+            'info'                  => 'Optional. Just click the x to clear.',
+            'index_skip'            => true,
+            'index_align'           => 'center',
+            'persist_wash'          => 'birthday',
+        ],
+        [
+            'name'                  => 'user_id',
+            'alternate_form_name'   => 'LaSalle User',
+            'type'                  => 'related_table',
+            'related_table_name'    => 'users',
+            'related_namespace'     => 'Lasallecms\Usermanagement\Models',
+            'related_model_class'   => 'User',
+            'related_fk_constraint' => false,
+            'related_pivot_table'   => false,
+            'nullable'              => true,
+            'info'                  => 'Optional! A customer need not be a system user.',
+            'index_skip'            => false,
+            'index_align'           => 'center',
+        ],
+    ];
+
+
+    // MISC PROPERTIES
+
+    /*
+     * Suppress the delete button when just one record to list, in the listings (index) page
+     *
+     * true  = suppress the delete button when just one record to list
+     * false = display the delete button when just one record to list
+     *
+     * @var bool
+     */
+    public $suppress_delete_button_when_one_record = false;
+
+    /*
+     * DO NOT DELETE THESE CORE RECORDS.
+     *
+     * Specify the TITLE of these records
+     *
+     * Assumed that this database table has a "title" field
+     *
+     * @var array
+     */
+    public $do_not_delete_these_core_records = [];
+
+
+    ///////////////////////////////////////////////////////////////////
+    //////////////        RELATIONSHIPS             ///////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /*
+     * One to one relationship with user_id.
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
      *
      * @return Eloquent
      */
@@ -117,52 +381,122 @@ class People extends BaseModel {
     }
 
     /*
-    * One to one relationship with address table
+     * Many to many relationship with addresses..
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
+     *
+     * @return Eloquent
+     */
+    public function address()
+    {
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Address', 'people_address');
+    }
+
+    /*
+    * Many to many relationship with emails.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
     *
     * @return Eloquent
     */
-    public function address()
-    {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Address');
-    }
-
-    /*
-     * One to one relationship with email table
-     *
-     * @return Eloquent
-     */
     public function email()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Email');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Email', 'people_email');
     }
 
     /*
-     * One to one relationship with social table
-     *
-     * @return Eloquent
-     */
+    * Many to many relationship with socials.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
     public function social()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Social');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Social', 'people_social');
     }
 
     /*
-     * One to one relationship with telephone table
-     *
-     * @return Eloquent
-     */
+    * Many to many relationship with telephones.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
     public function telephone()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Telephone');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Telephone', 'people_telephone');
     }
 
     /*
-     * One to one relationship with website table
+    * Many to many relationship with websites.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
+    public function website()
+    {
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Website', 'people_website');
+    }
+
+
+    /*
+     * One to one relationship with projects.
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
      *
      * @return Eloquent
      */
-    public function website()
+    public function project()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Website');
+        return $this->belongsTo('Lasallecms\Todo\Models\Project');
     }
+
+    /*
+     * One to one relationship with todo_item.
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
+     *
+     * @return Eloquent
+     */
+    public function todo_item()
+    {
+        return $this->belongsTo('Lasallecms\Todo\Models\Todo_item');
+    }
+
+
+    ///////////////////////////////////////////////////////////////////
+    //////////////        OTHER METHODS             ///////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    // none
 }

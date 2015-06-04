@@ -32,17 +32,30 @@ namespace Lasallecrm\Lasallecrmapi\Models;
  *
  */
 
-use Lasallecrm\Lasallecrmapi\Models\BaseModel;
+// LaSalle Software
+use Lasallecms\Lasallecmsapi\Models\BaseModel;
+
 
 class Company extends BaseModel
 {
+    ///////////////////////////////////////////////////////////////////
+    ///////////     MANDATORY USER DEFINED PROPERTIES      ////////////
+    ///////////              MODIFY THESE!                /////////////
+    ///////////////////////////////////////////////////////////////////
+
+
+    // LARAVEL MODEL CLASS PROPERTIES
+
     /**
      * The database table used by the model.
+     *
+     * The convention is plural -- and plural is assumed.
+     *
+     * Lowercase.
      *
      * @var string
      */
     public $table = 'companies';
-
 
     /**
      * Which fields may be mass assigned
@@ -52,6 +65,91 @@ class Company extends BaseModel
         'title', 'description', 'comments',
     ];
 
+
+    // PACKAGE PROPERTIES
+
+    /*
+     * Name of this package
+     *
+     * @var string
+     */
+    public $package_title = "LaSalleCRM";
+
+
+    // MODEL PROPERTIES
+
+    /*
+     * Model class namespace.
+     *
+     * Do *NOT* specify the model's class.
+     *
+     * @var string
+     */
+    public $model_namespace = "Lasallecrm\Lasallecrmapi\Models";
+
+    /*
+     * Model's class.
+     *
+     * Convention is capitalized and singular -- which is assumed.
+     *
+     * @var string
+     */
+    public $model_class = "Company";
+
+
+    // RESOURCE ROUTE PROPERTIES
+
+    /*
+     * The base URL of the resource routes.
+     *
+     * Frequently is the same as the table name.
+     *
+     * By convention, plural.
+     *
+     * Lowercase.
+     *
+     * @var string
+     */
+    public $resource_route_name   = "crmcompanies";
+
+
+    // FORM PROCESSORS PROPERTIES.
+    // THESE ARE THE ADMIN CRUD COMMAND HANDLERS.
+    // THE ONLY REASON YOU HAVE TO CREATE THESE COMMAND HANDLERS AT ALL IS THAT
+    // THE EVENTS DIFFER. EVERYTHING THAT HAPPENS UP TO THE "PERSIST" IS PRETTY STANDARD.
+
+    /*
+     * Namespace of the Form Processors
+     *
+     * MUST *NOT* have a slash at the end of the string
+     *
+     * @var string
+     */
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Companies';
+
+    /*
+     * Class name of the CREATE Form Processor command
+     *
+     * @var string
+     */
+    public $classname_formprocessor_create = 'CreateCompanyFormProcessing';
+
+    /*
+     * Namespace and class name of the UPDATE Form Processor command
+     *
+     * @var string
+     */
+    public $classname_formprocessor_update = 'UpdateCompanyFormProcessing';
+
+    /*
+     * Namespace and class name of the DELETE (DESTROY) Form Processor command
+     *
+     * @var string
+     */
+    public $classname_formprocessor_delete = 'DeleteCompanyFormProcessing';
+
+
+    // SANITATION RULES PROPERTIES
 
     /**
      * Sanitation rules for Create (INSERT)
@@ -76,6 +174,8 @@ class Company extends BaseModel
     ];
 
 
+    // VALIDATION RULES PROPERTIES
+
     /**
      * Validation rules for  Create (INSERT)
      *
@@ -95,53 +195,211 @@ class Company extends BaseModel
     ];
 
 
+    // USER GROUPS & ROLES PROPERTIES
+
     /*
-     * One to one relationship with address table
+     * User groups that are allowed to execute each controller action
+     *
+     * @var array
+     */
+    public $allowed_user_groups = [
+        ['index'   => ['Super Administrator']],
+        ['create'  => ['Super Administrator']],
+        ['store'   => ['Super Administrator']],
+        ['edit'    => ['Super Administrator']],
+        ['update'  => ['Super Administrator']],
+        ['destroy' => ['Super Administrator']],
+    ];
+
+
+    // FIELD LIST PROPERTIES
+
+    /*
+     * Field list
+     *
+     * ID and TITLE must go first.
+     *
+     * Forms will list fields in the order fields are listed in this array.
+     *
+     * @var array
+     */
+    public $field_list = [
+        [
+            'name'        => 'id',
+            'type'        => 'int',
+            'info'        => false,
+            'index_skip'  => false,
+            'index_align' => 'center',
+        ],
+        [
+            'name'         => 'title',
+            'type'         => 'varchar',
+            'info'         => false,
+            'index_skip'   => false,
+            'index_align'  => 'center',
+            'persist_wash' => 'title',
+        ],
+        [
+            'name'         => 'description',
+            'type'         => 'text-no-editor',
+            'info'         => 'Description is optional. 255 character maximum.',
+            'index_skip'   => false,
+        ],
+        [
+            'name'         => 'comments',
+            'type'         => 'text-with-editor',
+            'info'         => 'Optional.',
+            'index_skip'   => true,
+            'persist_wash' => 'content',
+        ],
+    ];
+
+
+    // MISC PROPERTIES
+
+    /*
+     * Suppress the delete button when just one record to list, in the listings (index) page
+     *
+     * true  = suppress the delete button when just one record to list
+     * false = display the delete button when just one record to list
+     *
+     * @var bool
+     */
+    public $suppress_delete_button_when_one_record = false;
+
+    /*
+     * DO NOT DELETE THESE CORE RECORDS.
+     *
+     * Specify the TITLE of these records
+     *
+     * Assumed that this database table has a "title" field
+     *
+     * @var array
+     */
+    public $do_not_delete_these_core_records = [];
+
+
+    ///////////////////////////////////////////////////////////////////
+    //////////////        RELATIONSHIPS             ///////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /*
+     * Many to many relationship with people..
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
+     *
+     * @return Eloquent
+     */
+    public function people()
+    {
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Address', 'company_people');
+    }
+
+    /*
+     * Many to many relationship with addresses..
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
      *
      * @return Eloquent
      */
     public function address()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Address');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Address', 'company_address');
     }
 
     /*
-     * One to one relationship with email table
-     *
-     * @return Eloquent
-     */
+    * Many to many relationship with emails.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
     public function email()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Email');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Email', 'company_email');
     }
 
     /*
-     * One to one relationship with social table
-     *
-     * @return Eloquent
-     */
+    * Many to many relationship with socials.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
     public function social()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Social');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Social', 'company_social');
     }
 
     /*
-     * One to one relationship with telephone table
-     *
-     * @return Eloquent
-     */
+    * Many to many relationship with telephones.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
     public function telephone()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Telephone');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Telephone', 'company_telephone');
     }
 
     /*
-     * One to one relationship with website table
+    * Many to many relationship with websites.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
+    public function website()
+    {
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Website', 'company_website');
+    }
+
+
+    /*
+     * One to one relationship with projects.
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
      *
      * @return Eloquent
      */
-    public function website()
+    public function project()
     {
-        return $this->belongsTo('Lasallecrm\Lasallecrmapi\Models\Website');
+        return $this->belongsTo('Lasallecms\Todo\Models\Project');
     }
+
+
+    ///////////////////////////////////////////////////////////////////
+    //////////////        OTHER METHODS             ///////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    // none
 }
