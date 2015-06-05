@@ -55,8 +55,8 @@ class LasallecrmapiTableSeeder extends Seeder
         // lookup_address_type table
 
         Lookup_address_type::create([
-            'title'       => 'Work',
-            'description' => 'Work',
+            'title'       => 'Billing',
+            'description' => 'Billing',
             'enabled'     => 1,
             'created_at' => new DateTime,
             'created_by' => 1,
@@ -75,8 +75,8 @@ class LasallecrmapiTableSeeder extends Seeder
         ]);
 
         Lookup_address_type::create([
-            'title'       => 'Billing',
-            'description' => 'Billing',
+            'title'       => 'Other',
+            'description' => '',
             'enabled'     => 1,
             'created_at' => new DateTime,
             'created_by' => 1,
@@ -94,8 +94,28 @@ class LasallecrmapiTableSeeder extends Seeder
             'updated_by' => 1,
         ]);
 
+        Lookup_address_type::create([
+            'title'       => 'Work',
+            'description' => 'Work',
+            'enabled'     => 1,
+            'created_at' => new DateTime,
+            'created_by' => 1,
+            'updated_at' => new DateTime,
+            'updated_by' => 1,
+        ]);
+
 
         // lookup_email_type table
+
+        Lookup_email_type::create([
+            'title'       => 'Other',
+            'description' => '',
+            'enabled'     => 1,
+            'created_at' => new DateTime,
+            'created_by' => 1,
+            'updated_at' => new DateTime,
+            'updated_by' => 1,
+        ]);
 
         Lookup_email_type::create([
             'title'       => 'Primary',
@@ -235,45 +255,64 @@ class LasallecrmapiTableSeeder extends Seeder
             'title'       => 'Yelp',
             'description' => 'Yelp is the best way to find great local businesses',
             'enabled'     => 1,
-            'created_at' => new DateTime,
-            'created_by' => 1,
-            'updated_at' => new DateTime,
-            'updated_by' => 1,
+            'created_at'  => new DateTime,
+            'created_by'  => 1,
+            'updated_at'  => new DateTime,
+            'updated_by'  => 1,
+        ]);
+
+        Lookup_social_type::create([
+            'title'       => 'Other',
+            'description' => '',
+            'enabled'     => 1,
+            'created_at'  => new DateTime,
+            'created_by'  => 1,
+            'updated_at'  => new DateTime,
+            'updated_by'  => 1,
         ]);
 
 
         // lookup_telephone_type table
 
         Lookup_telephone_type::create([
-            'title'       => 'Work',
-            'description' => 'Work',
+            'title'       => 'Cell',
+            'description' => 'Cell',
             'enabled'     => 1,
-            'created_at' => new DateTime,
-            'created_by' => 1,
-            'updated_at' => new DateTime,
-            'updated_by' => 1,
+            'created_at'  => new DateTime,
+            'created_by'  => 1,
+            'updated_at'  => new DateTime,
+            'updated_by'  => 1,
         ]);
 
         Lookup_telephone_type::create([
             'title'       => 'Home',
             'description' => 'Home',
             'enabled'     => 1,
-            'created_at' => new DateTime,
-            'created_by' => 1,
-            'updated_at' => new DateTime,
-            'updated_by' => 1,
+            'created_at'  => new DateTime,
+            'created_by'  => 1,
+            'updated_at'  => new DateTime,
+            'updated_by'  => 1,
         ]);
 
         Lookup_telephone_type::create([
-            'title'       => 'Cell',
-            'description' => 'Cell',
+            'title'       => 'Other',
+            'description' => '',
             'enabled'     => 1,
-            'created_at' => new DateTime,
-            'created_by' => 1,
-            'updated_at' => new DateTime,
-            'updated_by' => 1,
+            'created_at'  => new DateTime,
+            'created_by'  => 1,
+            'updated_at'  => new DateTime,
+            'updated_by'  => 1,
         ]);
 
+        Lookup_telephone_type::create([
+            'title'       => 'Work',
+            'description' => 'Work',
+            'enabled'     => 1,
+            'created_at'  => new DateTime,
+            'created_by'  => 1,
+            'updated_at'  => new DateTime,
+            'updated_by'  => 1,
+        ]);
 
 
         // lookup_website_type table
@@ -320,7 +359,17 @@ class LasallecrmapiTableSeeder extends Seeder
 
         Lookup_website_type::create([
             'title'       => 'Client',
-            'description' => 'This site is a client of someone!',
+            'description' => 'This site is a client of someone.',
+            'enabled'     => 1,
+            'created_at' => new DateTime,
+            'created_by' => 1,
+            'updated_at' => new DateTime,
+            'updated_by' => 1,
+        ]);
+
+        Lookup_website_type::create([
+            'title'       => 'Other',
+            'description' => 'No website type seems to apply.',
             'enabled'     => 1,
             'created_at' => new DateTime,
             'created_by' => 1,

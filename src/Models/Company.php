@@ -296,7 +296,7 @@ class Company extends BaseModel
      */
     public function people()
     {
-        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Address', 'company_people');
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\People', 'company_people');
     }
 
     /*

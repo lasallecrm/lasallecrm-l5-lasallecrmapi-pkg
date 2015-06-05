@@ -229,11 +229,11 @@ class Social extends BaseModel
      */
     public $field_list = [
         [
-            'name'                  => 'id',
-            'type'                  => 'int',
-            'info'                  => false,
-            'index_skip'            => false,
-            'index_align'           => 'center',
+            'name'                   => 'id',
+            'type'                   => 'int',
+            'info'                   => false,
+            'index_skip'             => false,
+            'index_align'            => 'center',
         ],
         [
             'name'                   => 'social_type_id',
@@ -243,7 +243,7 @@ class Social extends BaseModel
             'related_namespace'      => 'Lasallecrm\Lasallecrmapi\Models',
             'related_model_class'    => 'Lookup_social_type',
             'related_fk_constraint'  => false,
-            'related_pivot_table'   => false,
+            'related_pivot_table'    => false,
             'nullable'               => false,
             'info'                   => 'Type of social site.',
             'index_skip'             => false,
@@ -280,7 +280,7 @@ class Social extends BaseModel
             'related_fk_constraint'  => false,
             'related_pivot_table'    => true,
             'nullable'               => true,
-            'info'                   => 'Optional. Usually an address belongs to a company or to a person.',
+            'info'                   => 'Optional. Usually belongs to a company or to a person.',
             'index_skip'             => false,
             'index_align'            => 'center',
         ],
@@ -294,7 +294,7 @@ class Social extends BaseModel
             'related_fk_constraint'  => false,
             'related_pivot_table'    => true,
             'nullable'               => true,
-            'info'                   => 'Optional. Usually an address belongs to a company or to a person.',
+            'info'                   => 'Optional. Usually belongs to a company or to a person.',
             'index_skip'             => false,
             'index_align'            => 'center',
         ],

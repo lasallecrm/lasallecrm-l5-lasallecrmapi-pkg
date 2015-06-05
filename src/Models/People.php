@@ -242,17 +242,17 @@ class People extends BaseModel
                  * include  'index_skip' => true,  so existing code will exclude from index listing
                  * MySQL field type "text" so not run out of space concatenating multiple varchar(255) fields
              */
-            'name'                  => 'composite_title',
-            'type'                  => 'composite_title',
-            'fields_to_concatenate' => ['first_name', 'surname'],
-            'index_skip'            => true,
+            'name'                   => 'composite_title',
+            'type'                   => 'composite_title',
+            'fields_to_concatenate'  => ['first_name', 'surname'],
+            'index_skip'             => true,
         ],
         [
-            'name'                  => 'id',
-            'type'                  => 'int',
-            'info'                  => false,
-            'index_skip'            => false,
-            'index_align'           => 'center',
+            'name'                   => 'id',
+            'type'                   => 'int',
+            'info'                   => false,
+            'index_skip'             => false,
+            'index_align'            => 'center',
         ],
         [
             'name'                   => 'salutation',
@@ -329,7 +329,21 @@ class People extends BaseModel
             'related_fk_constraint' => false,
             'related_pivot_table'   => false,
             'nullable'              => true,
-            'info'                  => 'Optional! A customer need not be a system user.',
+            'info'                  => 'Optional! A customer need NOT be a LaSalle Software user.',
+            'index_skip'            => false,
+            'index_align'           => 'center',
+        ],
+        [
+            'name'                  => 'companies',
+            'alternate_form_name'   => 'Company/Organization',
+            'type'                  => 'related_table',
+            'related_table_name'    => 'companies',
+            'related_namespace'     => 'Lasallecrm\Lasallecrmapi\Models',
+            'related_model_class'   => 'Company',
+            'related_fk_constraint' => false,
+            'related_pivot_table'   => true,
+            'nullable'              => true,
+            'info'                  => 'Optional. Usually an address belongs to a company or to a person.',
             'index_skip'            => false,
             'index_align'           => 'center',
         ],
@@ -363,6 +377,22 @@ class People extends BaseModel
     ///////////////////////////////////////////////////////////////////
     //////////////        RELATIONSHIPS             ///////////////////
     ///////////////////////////////////////////////////////////////////
+
+    /*
+     * Many to many relationship with company..
+     *
+     * Method name must be:
+     *    * the model name,
+     *    * NOT the table name,
+     *    * singular;
+     *    * lowercase.
+     *
+     * @return Eloquent
+     */
+    public function company()
+    {
+        return $this->belongsToMany('Lasallecrm\Lasallecrmapi\Models\Company', 'company_people');
+    }
 
     /*
      * One to one relationship with user_id.

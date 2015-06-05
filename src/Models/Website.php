@@ -229,11 +229,11 @@ class Website extends BaseModel
      */
     public $field_list = [
         [
-            'name'                 => 'id',
-            'type'                 => 'int',
-            'info'                 => false,
-            'index_skip'           => false,
-            'index_align'          => 'center',
+            'name'                  => 'id',
+            'type'                  => 'int',
+            'info'                  => false,
+            'index_skip'            => false,
+            'index_align'           => 'center',
         ],
         [
             'name'                  => 'website_type_id',
@@ -253,7 +253,7 @@ class Website extends BaseModel
             'name'                  => 'title',
             'alternate_form_name'   => 'URL',
             'type'                  => 'varchar',
-            'info'                  => 'Include http://',
+            'info'                  => false,
             'index_skip'            => false,
             'index_align'           => 'center',
             'persist_wash'          => 'url',
@@ -281,7 +281,7 @@ class Website extends BaseModel
             'related_fk_constraint' => false,
             'related_pivot_table'   => true,
             'nullable'              => true,
-            'info'                  => 'Optional. Usually an address belongs to a company or to a person.',
+            'info'                  => 'Optional. Usually belongs to a company or to a person.',
             'index_skip'            => false,
             'index_align'           => 'center',
         ],
@@ -295,7 +295,7 @@ class Website extends BaseModel
             'related_fk_constraint' => false,
             'related_pivot_table'   => true,
             'nullable'              => false,
-            'info'                  => 'Optional. Usually an address belongs to a company or to a person.',
+            'info'                  => 'Optional. Usually belongs to a company or to a person.',
             'index_skip'            => false,
             'index_align'           => 'center',
         ],
