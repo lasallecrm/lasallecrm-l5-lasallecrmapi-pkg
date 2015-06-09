@@ -105,6 +105,14 @@ class Website extends BaseModel
     public $resource_route_name   = "crmwebsites";
 
 
+    /*
+     * Do you want the "view" button to display in the index listing?
+     *
+     * @var bool
+     */
+    public $display_the_view_button = true;
+
+
     // FORM PROCESSORS PROPERTIES.
     // THESE ARE THE ADMIN CRUD COMMAND HANDLERS.
     // THE ONLY REASON YOU HAVE TO CREATE THESE COMMAND HANDLERS AT ALL IS THAT
