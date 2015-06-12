@@ -126,7 +126,7 @@ class Telephone extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Telephones';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Telephones';
 
     /*
      * Class name of the CREATE Form Processor command

@@ -117,7 +117,7 @@ class Social extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Socials';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Socials';
 
     /*
      * Class name of the CREATE Form Processor command

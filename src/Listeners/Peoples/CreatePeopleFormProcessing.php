@@ -1,5 +1,5 @@
 <?php
-namespace Lasallecrm\Lasallecrmapi\Websites;
+namespace Lasallecrm\Lasallecrmapi\Listeners\Peoples;
 
 /**
  *
@@ -57,7 +57,7 @@ use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
  *
  * FYI: BaseFormProcessing implements the FormProcessing interface.
  */
-class CreateWebsiteFormProcessing extends BaseFormProcessing
+class CreatePeopleFormProcessing extends BaseFormProcessing
 {
     /*
      * Instance of the BASE repository
@@ -88,7 +88,7 @@ class CreateWebsiteFormProcessing extends BaseFormProcessing
      *
      * @var string
      */
-    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Website";
+    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\People";
 
 
 

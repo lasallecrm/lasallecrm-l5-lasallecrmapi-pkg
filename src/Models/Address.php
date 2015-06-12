@@ -121,7 +121,7 @@ class Address extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Addresses';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Addresses';
 
     /*
      * Class name of the CREATE Form Processor command

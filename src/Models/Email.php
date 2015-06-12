@@ -126,7 +126,7 @@ class Email extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Emails';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Emails';
 
     /*
      * Class name of the CREATE Form Processor command

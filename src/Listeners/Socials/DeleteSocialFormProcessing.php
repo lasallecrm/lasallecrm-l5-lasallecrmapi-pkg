@@ -1,5 +1,5 @@
 <?php
-namespace Lasallecrm\Lasallecrmapi\Emails;
+namespace Lasallecrm\Lasallecrmapi\Listeners\Socials;
 
 /**
  *
@@ -55,7 +55,7 @@ use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
  *
  * FYI: BaseFormProcessing implements the FormProcessing interface.
  */
-class DeleteEmailFormProcessing extends BaseFormProcessing
+class DeleteSocialFormProcessing extends BaseFormProcessing
 {
     /*
      * Instance of repository
@@ -86,7 +86,7 @@ class DeleteEmailFormProcessing extends BaseFormProcessing
      *
      * @var string
      */
-    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Email";
+    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Social";
 
 
     ///////////////////////////////////////////////////////////////////

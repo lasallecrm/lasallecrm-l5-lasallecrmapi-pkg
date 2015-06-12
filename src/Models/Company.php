@@ -125,7 +125,7 @@ class Company extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Companies';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Companies';
 
     /*
      * Class name of the CREATE Form Processor command
