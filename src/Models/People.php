@@ -536,7 +536,9 @@ class People extends BaseModel
     */
     public function episode()
     {
-        return $this->belongsToMany('Lasallecast\Lasallecastapi\Models\Episode', 'episode_guest');
+        if (class_exists(\Lasallecms\Knowledgebase\Version::class)) {
+            return $this->belongsToMany('Lasallecast\Lasallecastapi\Models\Episode', 'episode_guest');
+        }
     }
 
 
