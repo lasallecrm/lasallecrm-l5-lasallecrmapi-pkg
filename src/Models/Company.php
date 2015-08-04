@@ -397,6 +397,23 @@ class Company extends BaseModel
     }
 
 
+    /*
+    * Many to many relationship with LaSalleCast Episodes.
+    *
+    * Method name must be:
+    *    * the model name,
+    *    * NOT the table name,
+    *    * singular;
+    *    * lowercase.
+    *
+    * @return Eloquent
+    */
+    public function episode()
+    {
+        return $this->belongsToMany('Lasallecast\Lasallecastapi\Models\Episode', 'episode_sponsor');
+    }
+
+
     ///////////////////////////////////////////////////////////////////
     //////////////        OTHER METHODS             ///////////////////
     ///////////////////////////////////////////////////////////////////
