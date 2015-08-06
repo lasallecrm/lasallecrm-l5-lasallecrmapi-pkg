@@ -736,7 +736,7 @@ class CreateCrmapiTables extends Migration {
             $table->dropIndex('company_address_address_id_index');
             $table->dropForeign('company_address_address_id_foreign');
         });
-        Schema::dropIfExists('company_people');
+        Schema::dropIfExists('company_address');
 
         Schema::table('company_email', function($table){
             $table->dropIndex('company_email_company_id_index');
