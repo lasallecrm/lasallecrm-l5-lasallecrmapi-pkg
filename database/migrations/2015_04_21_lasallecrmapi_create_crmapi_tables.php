@@ -196,7 +196,7 @@ class CreateCrmapiTables extends Migration {
 
                 $table->increments('id')->unsigned();
 
-                $table->string('title');
+                $table->string('title')->unique();;
                 $table->string('description');
                 $table->text('comments');
 
@@ -270,7 +270,7 @@ class CreateCrmapiTables extends Migration {
                 $table->integer('address_type_id')->unsigned();
                 $table->foreign('address_type_id')->references('id')->on('lookup_address_types');
 
-                // "Composite Title" that is comprised of the "first_name" and "surname"
+                // "Composite Title" that is comprised of the ['street1', 'street2', 'city']
                 // concatenated automatically during persist operations.
                 $table->string('title');
 
