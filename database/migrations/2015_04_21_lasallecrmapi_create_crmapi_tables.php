@@ -340,7 +340,7 @@ class CreateCrmapiTables extends Migration {
                 $table->integer('social_type_id')->unsigned();
                 $table->foreign('social_type_id')->references('id')->on('lookup_social_types');
 
-                $table->string('title');
+                $table->string('title')->unique();
                 $table->string('description');
                 $table->text('comments');
 
