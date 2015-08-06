@@ -112,6 +112,13 @@ class People extends BaseModel
      */
     public $resource_route_name   = "crmpeoples";
 
+    /*
+     * Do you want the "view" button to display in the index listing?
+     *
+     * @var bool
+     */
+    public $display_the_view_button = true;
+
 
     // FORM PROCESSORS PROPERTIES.
     // THESE ARE THE ADMIN CRUD COMMAND HANDLERS.
@@ -163,6 +170,8 @@ class People extends BaseModel
         'surname'     => 'trim|strip_tags',
         'description' => 'trim',
         'comments'    => 'trim',
+        'profile'          => 'trim',
+        'featured_image'   => 'trim',
     ];
 
     /**
@@ -177,6 +186,8 @@ class People extends BaseModel
         'surname'     => 'trim|strip_tags',
         'description' => 'trim',
         'comments'    => 'trim',
+        'profile'          => 'trim',
+        'featured_image'   => 'trim',
     ];
 
 
@@ -258,7 +269,7 @@ class People extends BaseModel
             'name'                   => 'salutation',
             'type'                   => 'varchar',
             'info'                   => 'Mr., Mrs., Dr., etc',
-            'index_skip'             => false,
+            'index_skip'             => true,
             'index_align'            => 'center',
             'persist_wash'           => 'description',
         ],
@@ -273,7 +284,7 @@ class People extends BaseModel
             'name'                   => 'middle_name',
             'type'                   => 'varchar',
             'info'                   => false,
-            'index_skip'             => false,
+            'index_skip'             => true,
             'persist_wash'           => 'description',
         ],
         [
@@ -287,14 +298,14 @@ class People extends BaseModel
             'name'                   => 'position',
             'type'                   => 'varchar',
             'info'                   => false,
-            'index_skip'             => false,
+            'index_skip'             => true,
             'persist_wash'           => 'description',
         ],
         [
             'name'                   => 'description',
             'type'                   => 'text-no-editor',
             'info'                   => 'Description is optional. 255 character maximum.',
-            'index_skip'             => false,
+            'index_skip'             => true,
         ],
         [
             'name'                   => 'comments',
@@ -302,6 +313,19 @@ class People extends BaseModel
             'info'                   => 'Optional.',
             'index_skip'             => true,
             'persist_wash'           => 'content',
+        ],
+        [
+            'name'                  => 'profile',
+            'type'                  => 'text-with-editor',
+            'info'                  => 'Profile that displays in the front-end (such as for LaSalleCast). Optional.',
+            'index_skip'            => true,
+            'persist_wash'          => 'content',
+        ],
+        [
+            'name'                  => 'featured_image',
+            'type'                  => 'varchar',
+            'info'                  => 'The one single image that represents this person. Optional.',
+            'index_skip'            => true,
         ],
         [
             'name'                  => 'birthday',

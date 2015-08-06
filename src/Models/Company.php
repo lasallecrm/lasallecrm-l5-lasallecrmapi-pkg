@@ -112,6 +112,13 @@ class Company extends BaseModel
      */
     public $resource_route_name   = "crmcompanies";
 
+    /*
+     * Do you want the "view" button to display in the index listing?
+     *
+     * @var bool
+     */
+    public $display_the_view_button = true;
+
 
     // FORM PROCESSORS PROPERTIES.
     // THESE ARE THE ADMIN CRUD COMMAND HANDLERS.
@@ -160,6 +167,8 @@ class Company extends BaseModel
         'title'       => 'trim|strip_tags',
         'description' => 'trim',
         'comments'    => 'trim',
+        'profile'          => 'trim',
+        'featured_image'   => 'trim',
     ];
 
     /**
@@ -171,6 +180,8 @@ class Company extends BaseModel
         'title'       => 'trim|strip_tags',
         'description' => 'trim',
         'comments'    => 'trim',
+        'profile'          => 'trim',
+        'featured_image'   => 'trim',
     ];
 
 
@@ -251,6 +262,19 @@ class Company extends BaseModel
             'info'         => 'Optional.',
             'index_skip'   => true,
             'persist_wash' => 'content',
+        ],
+        [
+            'name'                  => 'profile',
+            'type'                  => 'text-with-editor',
+            'info'                  => 'Profile that displays in the front-end (such as for LaSalleCast). Optional.',
+            'index_skip'            => true,
+            'persist_wash'          => 'content',
+        ],
+        [
+            'name'                  => 'featured_image',
+            'type'                  => 'varchar',
+            'info'                  => 'The one single image that represents this company. Optional.',
+            'index_skip'            => true,
         ],
     ];
 
