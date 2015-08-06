@@ -684,7 +684,7 @@ class CreateCrmapiTables extends Migration {
         Schema::dropIfExists('addresses');
 
         Schema::table('emails', function($table){
-            $table->dropIndex('emails_email_unique');
+            $table->dropIndex('emails_title_unique');
             $table->dropForeign('emails_email_type_id_foreign');
             $table->dropForeign('emails_created_by_foreign');
             $table->dropForeign('emails_updated_by_foreign');
