@@ -37,7 +37,7 @@
 ////  tables for LaSalleCast                                       ////
 ///////////////////////////////////////////////////////////////////////
 
-
+JoomlaDay Greece 2011
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -57,14 +57,14 @@ class ModifyCrmapipeoplescompaniesTables extends Migration
 
         if (Schema::hasTable('companies')) {
             Schema::table('companies', function (Blueprint $table) {
-                $table->string('profile')->nullable();
+                $table->text('profile')->nullable();
                 $table->string('featured_image')->nullable();
             });
         }
 
         if (Schema::hasTable('peoples')) {
             Schema::table('peoples', function (Blueprint $table) {
-                $table->string('profile')->nullable();
+                $table->text('profile')->nullable();
                 $table->string('featured_image')->nullable();
             });
         }
