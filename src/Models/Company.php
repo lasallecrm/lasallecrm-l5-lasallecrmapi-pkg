@@ -434,7 +434,7 @@ class Company extends BaseModel
     */
     public function episode()
     {
-        if (class_exists(\Lasallecms\Knowledgebase\Version::class)) {
+        if (class_exists(\Lasallecast\Lasallecastapi\Version::class)) {
             return $this->belongsToMany('Lasallecast\Lasallecastapi\Models\Episode', 'episode_sponsor');
         }
     }
