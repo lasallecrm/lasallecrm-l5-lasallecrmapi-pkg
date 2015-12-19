@@ -164,12 +164,12 @@ class People extends BaseModel
      * @var array
      */
     public $sanitationRulesForCreate = [
-        'user_id'     => 'trim|strip_tags',
-        'first_name'  => 'trim|strip_tags',
-        'middle_name' => 'trim|strip_tags',
-        'surname'     => 'trim|strip_tags',
-        'description' => 'trim',
-        'comments'    => 'trim',
+        'user_id'          => 'trim|strip_tags',
+        'first_name'       => 'trim|strip_tags',
+        'middle_name'      => 'trim|strip_tags',
+        'surname'          => 'trim|strip_tags',
+        'description'      => 'trim',
+        'comments'         => 'trim',
         'profile'          => 'trim',
         'featured_image'   => 'trim',
     ];
@@ -180,12 +180,12 @@ class People extends BaseModel
      * @var array
      */
     public $sanitationRulesForUpdate = [
-        'user_id'     => 'trim|strip_tags',
-        'first_name'  => 'trim|strip_tags',
-        'middle_name' => 'trim|strip_tags',
-        'surname'     => 'trim|strip_tags',
-        'description' => 'trim',
-        'comments'    => 'trim',
+        'user_id'          => 'trim|strip_tags',
+        'first_name'       => 'trim|strip_tags',
+        'middle_name'      => 'trim|strip_tags',
+        'surname'          => 'trim|strip_tags',
+        'description'      => 'trim',
+        'comments'         => 'trim',
         'profile'          => 'trim',
         'featured_image'   => 'trim',
     ];
@@ -210,8 +210,8 @@ class People extends BaseModel
      */
     public $validationRulesForUpdate = [
         'address_type_id' => 'integer',
-        'user_id' => 'integer',
-        'surname' => 'required|min:4',
+        'user_id'         => 'integer',
+        'surname'         => 'required|min:4',
     ];
 
 
@@ -321,12 +321,38 @@ class People extends BaseModel
             'index_skip'            => true,
             'persist_wash'          => 'content',
         ],
+
+        // Start: Featured Image
+        // https://github.com/lasallecms/lasallecms-l5-formhandling-pkg/tree/master/views/adminformhandling/bob1/README_FEATURED_IMAGE.md
         [
             'name'                  => 'featured_image',
             'type'                  => 'varchar',
-            'info'                  => 'The one single image that represents this person. Optional.',
+            'info'                  => 'The one single image that represents this post, displayed in lists, and at top of the post.',
+            'index_skip'            => false,
+        ],
+
+        [
+            'name'                  => 'featured_image_url',
+            'type'                  => 'varchar',
+            'info'                  => '',
             'index_skip'            => true,
         ],
+
+        [
+            'name'                  => 'featured_image_upload',
+            'type'                  => 'file',
+            'info'                  => '',
+            'index_skip'            => true,
+        ],
+
+        [
+            'name'                  => 'featured_image_server',
+            'type'                  => 'varchar',
+            'info'                  => '',
+            'index_skip'            => true,
+        ],
+        // End: Featured Image
+
         [
             'name'                  => 'birthday',
             'type'                  => 'date',

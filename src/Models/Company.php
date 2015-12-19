@@ -264,18 +264,44 @@ class Company extends BaseModel
             'persist_wash' => 'content',
         ],
         [
-            'name'                  => 'profile',
-            'type'                  => 'text-with-editor',
-            'info'                  => 'Profile that displays in the front-end (such as for LaSalleCast). Optional.',
-            'index_skip'            => true,
-            'persist_wash'          => 'content',
+            'name'         => 'profile',
+            'type'         => 'text-with-editor',
+            'info'         => 'Profile that displays in the front-end (such as for LaSalleCast). Optional.',
+            'index_skip'   => true,
+            'persist_wash' => 'content',
         ],
+
+        // Start: Featured Image
+        // https://github.com/lasallecms/lasallecms-l5-formhandling-pkg/tree/master/views/adminformhandling/bob1/README_FEATURED_IMAGE.md
         [
             'name'                  => 'featured_image',
             'type'                  => 'varchar',
-            'info'                  => 'The one single image that represents this company. Optional.',
+            'info'                  => 'The one single image that represents this post, displayed in lists, and at top of the post.',
+            'index_skip'            => false,
+        ],
+
+        [
+            'name'                  => 'featured_image_url',
+            'type'                  => 'varchar',
+            'info'                  => '',
             'index_skip'            => true,
         ],
+
+        [
+            'name'                  => 'featured_image_upload',
+            'type'                  => 'file',
+            'info'                  => '',
+            'index_skip'            => true,
+        ],
+
+        [
+            'name'                  => 'featured_image_server',
+            'type'                  => 'varchar',
+            'info'                  => '',
+            'index_skip'            => true,
+        ],
+        // End: Featured Image
+
     ];
 
 
