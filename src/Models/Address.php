@@ -61,6 +61,15 @@ class Address extends BaseModel
         'address_type_id', 'street1', 'street2', 'street3', 'street4', 'city', 'province', 'country', 'postal_code', 'description', 'comments',
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * LaSalle Software handles the created_at and updated_at fields, so false.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
 
     // PACKAGE PROPERTIES
 

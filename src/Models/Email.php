@@ -66,6 +66,15 @@ class Email extends BaseModel
         'email_type_id', 'title', 'description', 'comments',
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * LaSalle Software handles the created_at and updated_at fields, so false.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
 
     // PACKAGE PROPERTIES
 

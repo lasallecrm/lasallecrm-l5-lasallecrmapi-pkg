@@ -40,8 +40,11 @@ class People_address extends BaseModel
     public $table = 'address_people';
 
     /**
-     * Timestamps for this pivot table
-     * @var binary
+     * Indicates if the model should be timestamped.
+     *
+     * Pivot tables do not have the created_at and updated_at fields, so false.
+     *
+     * @var bool
      */
     public $timestamps = false;
 }

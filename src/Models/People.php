@@ -65,6 +65,16 @@ class People extends BaseModel
         'user_id', 'salutation', 'first_name', 'middle_name', 'surname', 'position', 'description', 'comments',
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * LaSalle Software handles the created_at and updated_at fields, so false.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+
 
     // PACKAGE PROPERTIES
 
