@@ -142,7 +142,7 @@ class People extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Peoples';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Formprocessing\Peoples';
 
     /*
      * Class name of the CREATE Form Processor command

@@ -1,5 +1,5 @@
 <?php
-namespace Lasallecrm\Lasallecrmapi\Listeners\Companies;
+namespace Lasallecrm\Lasallecrmapi\Formprocessing\Websites;
 
 /**
  *
@@ -32,7 +32,6 @@ namespace Lasallecrm\Lasallecrmapi\Listeners\Companies;
  *
  */
 
-
 ///////////////////////////////////////////////////////////////////
 ///            THIS IS A COMMAND HANDLER                        ///
 ///////////////////////////////////////////////////////////////////
@@ -46,31 +45,23 @@ namespace Lasallecrm\Lasallecrmapi\Listeners\Companies;
 ///////////////////////////////////////////////////////////////////
 
 
-
 // LaSalle Software
 use Lasallecms\Lasallecmsapi\Repositories\BaseRepository;
 use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
-use Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing;
-
 
 /*
- * Process a new record.
+ * Process an existing record.
  *
  * FYI: BaseFormProcessing implements the FormProcessing interface.
  */
-class CreateCompanyFormProcessing extends BaseFormProcessing
+class UpdateWebsiteFormProcessing extends BaseFormProcessing
 {
     /*
-     * Instance of the BASE repository
+     * Instance of repository
      *
      * @var Lasallecms\Lasallecmsapi\Repositories\BaseRepository
      */
     protected $repository;
-
-    /**
-     * @var Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
-     */
-    protected $featuredImageProcessing;
 
 
     ///////////////////////////////////////////////////////////////////
@@ -84,7 +75,7 @@ class CreateCompanyFormProcessing extends BaseFormProcessing
      *
      * @var string
      */
-    protected $type = "create";
+    protected $type = "update";
 
     ///////////////////////////////////////////////////////////////////
     /// SPECIFY THE FULL NAMESPACE AND CLASS NAME OF THE MODEL      ///
@@ -94,8 +85,7 @@ class CreateCompanyFormProcessing extends BaseFormProcessing
      *
      * @var string
      */
-    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Company";
-
+    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Website";
 
 
 
@@ -108,19 +98,13 @@ class CreateCompanyFormProcessing extends BaseFormProcessing
      * Inject the model
      *
      * @param Lasallecms\Lasallecmsapi\Repositories\BaseRepository
-     * @param Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
      */
-    public function __construct(BaseRepository $repository, FeaturedImageProcessing $featuredImageProcessing)
+    public function __construct(BaseRepository $repository)
     {
         $this->repository = $repository;
 
         $this->repository->injectModelIntoRepository($this->namespaceClassnameModel);
-
-        // inject featured image processing class
-        $this->featuredImageProcessing = $featuredImageProcessing;
     }
-
-
 
     /*
      * The form processing steps.
@@ -128,34 +112,23 @@ class CreateCompanyFormProcessing extends BaseFormProcessing
      * @param  object  $createCommand   The command bus object
      * @return array                    The custom response array
      */
-    public function quarterback($createCommand)
+    public function quarterback($updateCommand)
     {
         // Convert the command bus object into an array
-        $data = (array) $createCommand;
+        $data = (array) $updateCommand;
 
 
         // Sanitize
         $data = $this->sanitize($data, $this->type);
 
 
-        // Process the featured image, including validating the featured image
-        $featuredImageProcessing = $this->featuredImageProcessing->process($data);
-
-        // Did the featured image validation fail?
-        if ($featuredImageProcessing['validationMessage'] != "passed") {
-
-            // Prepare the response array, and then return to the edit form with error messages
-            return $this->prepareResponseArray('validation_failed', 500, $data, $featuredImageProcessing['validationMessage']);
-        }
-        if ($featuredImageProcessing['validationMessage'] == "passed") {
-            $data['featured_image'] = $featuredImageProcessing['featured_image'];
-        }
-
-
         // Validate
         if ($this->validate($data, $this->type) != "passed")
         {
-            // Prepare the response array, and then return to the form with error messages
+            // Unlock the record
+            $this->unlock($data['id']);
+
+            // Prepare the response array, and then return to the edit form with error messages
             return $this->prepareResponseArray('validation_failed', 500, $data, $this->validate($data, $this->type));
         }
 
@@ -164,10 +137,13 @@ class CreateCompanyFormProcessing extends BaseFormProcessing
         $data = $this->wash($data);
 
 
-        // INSERT record
+        // UPDATE record
         if (!$this->persist($data, $this->type))
         {
-            // Prepare the response array, and then return to the form with error messages
+            // Unlock the record
+            $this->unlock($data['id']);
+
+            // Prepare the response array, and then return to the edit form with error messages
             // Laravel's https://github.com/laravel/framework/blob/5.0/src/Illuminate/Database/Eloquent/Model.php
             //  does not prepare a MessageBag object, so we'll whip up an error message in the
             //  originating controller
@@ -175,8 +151,12 @@ class CreateCompanyFormProcessing extends BaseFormProcessing
         }
 
 
-        // Prepare the response array, and then return to the controller
-        return $this->prepareResponseArray('create_successful', 200, $data);
+        // Unlock the record
+        $this->unlock($data['id']);
+
+
+        // Prepare the response array, and then return to the command
+        return $this->prepareResponseArray('update_successful', 200, $data);
 
 
         ///////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 <?php
-namespace Lasallecrm\Lasallecrmapi\Listeners\Websites;
+namespace Lasallecrm\Lasallecrmapi\Formprocessing\Peoples;
 
 /**
  *
@@ -48,13 +48,14 @@ namespace Lasallecrm\Lasallecrmapi\Listeners\Websites;
 // LaSalle Software
 use Lasallecms\Lasallecmsapi\Repositories\BaseRepository;
 use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
+use Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing;
 
 /*
  * Process an existing record.
  *
  * FYI: BaseFormProcessing implements the FormProcessing interface.
  */
-class UpdateWebsiteFormProcessing extends BaseFormProcessing
+class UpdatePeopleFormProcessing extends BaseFormProcessing
 {
     /*
      * Instance of repository
@@ -62,6 +63,11 @@ class UpdateWebsiteFormProcessing extends BaseFormProcessing
      * @var Lasallecms\Lasallecmsapi\Repositories\BaseRepository
      */
     protected $repository;
+
+    /**
+     * @var Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
+     */
+    protected $featuredImageProcessing;
 
 
     ///////////////////////////////////////////////////////////////////
@@ -85,7 +91,7 @@ class UpdateWebsiteFormProcessing extends BaseFormProcessing
      *
      * @var string
      */
-    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Website";
+    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\People";
 
 
 
@@ -98,12 +104,16 @@ class UpdateWebsiteFormProcessing extends BaseFormProcessing
      * Inject the model
      *
      * @param Lasallecms\Lasallecmsapi\Repositories\BaseRepository
+     * @param Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
      */
-    public function __construct(BaseRepository $repository)
+    public function __construct(BaseRepository $repository, FeaturedImageProcessing $featuredImageProcessing)
     {
         $this->repository = $repository;
 
         $this->repository->injectModelIntoRepository($this->namespaceClassnameModel);
+
+        // inject featured image processing class
+        $this->featuredImageProcessing = $featuredImageProcessing;
     }
 
     /*
@@ -120,6 +130,23 @@ class UpdateWebsiteFormProcessing extends BaseFormProcessing
 
         // Sanitize
         $data = $this->sanitize($data, $this->type);
+
+
+        // Process the featured image, including validating the featured image
+        $featuredImageProcessing = $this->featuredImageProcessing->process($data);
+
+        // Did the featured image validation fail?
+        if ($featuredImageProcessing['validationMessage'] != "passed") {
+
+            // Unlock the record
+            $this->unlock($data['id']);
+
+            // Prepare the response array, and then return to the edit form with error messages
+            return $this->prepareResponseArray('validation_failed', 500, $data, $featuredImageProcessing['validationMessage']);
+        }
+        if ($featuredImageProcessing['validationMessage'] == "passed") {
+            $data['featured_image'] = $featuredImageProcessing['featured_image'];
+        }
 
 
         // Validate

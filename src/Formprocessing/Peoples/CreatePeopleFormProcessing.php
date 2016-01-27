@@ -1,5 +1,5 @@
 <?php
-namespace Lasallecrm\Lasallecrmapi\Listeners\Peoples;
+namespace Lasallecrm\Lasallecrmapi\Formprocessing\Peoples;
 
 /**
  *

@@ -1,5 +1,5 @@
 <?php
-namespace Lasallecrm\Lasallecrmapi\Listeners\Addresses;
+namespace Lasallecrm\Lasallecrmapi\Formprocessing\Companies;
 
 /**
  *
@@ -50,6 +50,7 @@ namespace Lasallecrm\Lasallecrmapi\Listeners\Addresses;
 // LaSalle Software
 use Lasallecms\Lasallecmsapi\Repositories\BaseRepository;
 use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
+use Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing;
 
 
 /*
@@ -57,7 +58,7 @@ use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
  *
  * FYI: BaseFormProcessing implements the FormProcessing interface.
  */
-class CreateAddressFormProcessing extends BaseFormProcessing
+class CreateCompanyFormProcessing extends BaseFormProcessing
 {
     /*
      * Instance of the BASE repository
@@ -65,6 +66,11 @@ class CreateAddressFormProcessing extends BaseFormProcessing
      * @var Lasallecms\Lasallecmsapi\Repositories\BaseRepository
      */
     protected $repository;
+
+    /**
+     * @var Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
+     */
+    protected $featuredImageProcessing;
 
 
     ///////////////////////////////////////////////////////////////////
@@ -88,7 +94,7 @@ class CreateAddressFormProcessing extends BaseFormProcessing
      *
      * @var string
      */
-    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Address";
+    protected $namespaceClassnameModel = "Lasallecrm\Lasallecrmapi\Models\Company";
 
 
 
@@ -102,12 +108,16 @@ class CreateAddressFormProcessing extends BaseFormProcessing
      * Inject the model
      *
      * @param Lasallecms\Lasallecmsapi\Repositories\BaseRepository
+     * @param Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
      */
-    public function __construct(BaseRepository $repository)
+    public function __construct(BaseRepository $repository, FeaturedImageProcessing $featuredImageProcessing)
     {
         $this->repository = $repository;
 
         $this->repository->injectModelIntoRepository($this->namespaceClassnameModel);
+
+        // inject featured image processing class
+        $this->featuredImageProcessing = $featuredImageProcessing;
     }
 
 
@@ -126,6 +136,20 @@ class CreateAddressFormProcessing extends BaseFormProcessing
 
         // Sanitize
         $data = $this->sanitize($data, $this->type);
+
+
+        // Process the featured image, including validating the featured image
+        $featuredImageProcessing = $this->featuredImageProcessing->process($data);
+
+        // Did the featured image validation fail?
+        if ($featuredImageProcessing['validationMessage'] != "passed") {
+
+            // Prepare the response array, and then return to the edit form with error messages
+            return $this->prepareResponseArray('validation_failed', 500, $data, $featuredImageProcessing['validationMessage']);
+        }
+        if ($featuredImageProcessing['validationMessage'] == "passed") {
+            $data['featured_image'] = $featuredImageProcessing['featured_image'];
+        }
 
 
         // Validate

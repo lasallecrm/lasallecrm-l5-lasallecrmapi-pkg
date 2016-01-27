@@ -134,7 +134,7 @@ class Website extends BaseModel
      *
      * @var string
      */
-    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Listeners\Websites';
+    public $namespace_formprocessor = 'Lasallecrm\Lasallecrmapi\Formprocessing\Websites';
 
     /*
      * Class name of the CREATE Form Processor command
