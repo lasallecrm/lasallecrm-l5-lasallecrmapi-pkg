@@ -402,6 +402,7 @@ class People extends BaseModel
             'related_model_class'   => 'Company',
             'related_fk_constraint' => false,
             'related_pivot_table'   => true,
+            'related_pivot_table_name' => 'people_email',
             'nullable'              => true,
             'info'                  => 'Optional. Usually an address belongs to a company or to a person.',
             'index_skip'            => false,
