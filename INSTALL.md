@@ -9,7 +9,7 @@ LaSalle Software email list management.
 ```
 {
     "require": {
-        "lasallecrm/lasallecrmapi": "0.9.*",
+        "lasallecrm/lasallecrmapi": "1.*",
     }
 }
 ```
