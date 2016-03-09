@@ -37,7 +37,6 @@
 ////  tables for LaSalleCast                                       ////
 ///////////////////////////////////////////////////////////////////////
 
-JoomlaDay Greece 2011
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 

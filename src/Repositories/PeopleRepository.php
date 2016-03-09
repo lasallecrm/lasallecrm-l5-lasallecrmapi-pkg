@@ -1,6 +1,6 @@
 <?php
 
-namespace Lasallecrm\Lasallecrmapi;
+namespace Lasallecrm\Lasallecrmapi\Repositories;
 
 /**
  *
@@ -33,41 +33,31 @@ namespace Lasallecrm\Lasallecrmapi;
  *
  */
 
-class Version
+
+
+// LaSalle Software
+use Lasallecrm\Lasallecrmapi\Repositories\BaseRepository;
+use Lasallecrm\Lasallecrmapi\Models\People;
+
+// Laravel facades
+//use Illuminate\Support\Facades\DB;
+
+
+class PeopleRepository extends BaseRepository
 {
-	/**
-	 * This package's version number.
-	 *
-	 * @var string
-	 */
-	const VERSION = '1.01';
+    /**
+     * Instance of model
+     *
+     * @var Lasallecrm\Lasallecrmapi\Models\People
+     */
+    protected $model;
 
-
-	/**
-	 * This package's name.
-	 *
-	 * @var string
-	 */
-	const PACKAGE = 'Internal API package for the LaSalle Customer Relationship Management package';
-
-
-	/**
-	 * Get the version number of this package.
-	 *
-	 * @return string
-	 */
-	public function version()
-	{
-		return static::VERSION;
-	}
-
-	/**
-	 * Get the name of this package.
-	 *
-	 * @return string
-	 */
-	public function packageName()
-	{
-		return static::PACKAGE;
-	}
+    /**
+     * Inject the model
+     *
+     * @param  Lasallecrm\Lasallecrmapi\Models\People
+     */
+    public function __construct(People $model) {
+        $this->model = $model;
+    }
 }

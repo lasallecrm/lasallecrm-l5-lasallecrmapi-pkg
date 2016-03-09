@@ -1,4 +1,6 @@
-<?php namespace Lasallecrm\Lasallecrmapi;
+<?php
+
+namespace Lasallecrm\Lasallecrmapi;
 
 /**
  *
@@ -40,8 +42,8 @@ use Illuminate\Support\ServiceProvider;
  *
  * @author Bob Bloom <info@southlasalle.com>
  */
-class LasallecrmapiServiceProvider extends ServiceProvider {
-
+class LasallecrmapiServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
