@@ -35,7 +35,8 @@ namespace Lasallecrm\Lasallecrmapi\Repositories;
 
 
 // LaSalle Software
-use Lasallecrm\Lasallecrmapi\Repositories\BaseRepository;
+//use Lasallecrm\Lasallecrmapi\Repositories\BaseRepository;
+use Lasallecms\Lasallecmsapi\Repositories\BaseRepository;
 use Lasallecrm\Lasallecrmapi\Models\Email;
 
 // Laravel facades
