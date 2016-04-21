@@ -1,4 +1,5 @@
 <?php
+
 namespace Lasallecrm\Lasallecrmapi\Formprocessing\Peoples;
 
 /**
@@ -49,8 +50,8 @@ namespace Lasallecrm\Lasallecrmapi\Formprocessing\Peoples;
 
 // LaSalle Software
 use Lasallecms\Lasallecmsapi\Repositories\BaseRepository;
-use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
-use Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing;
+use Lasallecms\Lasallecmsadmin\FormProcessing\BaseFormProcessing;
+use Lasallecms\Lasallecmsapi\FeaturedImageProcessing\FeaturedImageProcessing;
 
 
 /*
@@ -68,7 +69,7 @@ class CreatePeopleFormProcessing extends BaseFormProcessing
     protected $repository;
 
     /**
-     * @var Lasallecms\Lasallecmsapi\FormProcessing\FeaturedImageProcessing
+     * @var Lasallecms\Lasallecmsapi\FeaturedImageProcessing\FeaturedImageProcessing
      */
     protected $featuredImageProcessing;
 

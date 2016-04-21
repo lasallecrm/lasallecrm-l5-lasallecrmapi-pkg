@@ -1,4 +1,5 @@
 <?php
+
 namespace Lasallecrm\Lasallecrmapi\Formprocessing\Addresses;
 
 /**
@@ -49,7 +50,7 @@ namespace Lasallecrm\Lasallecrmapi\Formprocessing\Addresses;
 
 // LaSalle Software
 use Lasallecms\Lasallecmsapi\Repositories\BaseRepository;
-use Lasallecms\Lasallecmsapi\FormProcessing\BaseFormProcessing;
+use Lasallecms\Lasallecmsadmin\FormProcessing\BaseFormProcessing;
 
 
 /*
