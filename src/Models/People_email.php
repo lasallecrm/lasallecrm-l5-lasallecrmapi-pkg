@@ -37,7 +37,7 @@ use Lasallecms\Lasallecmsapi\Models\BaseModel;
 
 class People_email extends BaseModel
 {
-    public $table = 'address_email';
+    public $table = 'people_email';
 
     /**
      * Indicates if the model should be timestamped.
