@@ -1,7 +1,7 @@
 # INSTALLATION
 
 ## Summary 
-LaSalle Software email list management.  
+LaSalle CRM internal API.  
 
 
 ## composer.json:
