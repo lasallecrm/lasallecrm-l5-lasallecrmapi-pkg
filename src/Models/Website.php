@@ -287,6 +287,7 @@ class Website extends BaseModel
             'info'                  => 'Optional.',
             'index_skip'            => true,
             'persist_wash'          => 'content',
+            'crypt'                 => true,
         ],
         [
             'name'                  => 'companies',
